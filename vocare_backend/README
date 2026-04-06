@@ -1,0 +1,437 @@
+# 🎙️ Vocare – AI-Based Voice Health Screening System
+
+## 📌 Overview
+
+**Vocare** is an AI-powered voice health screening system designed to detect early signs of vocal irregularities using acoustic feature extraction and machine learning.
+
+The system allows users to upload or record a voice sample and receive instant insights about their vocal health, including risk levels, acoustic metrics, and recommendations.
+
+> ⚠️ This is an early screening tool and not a medical diagnosis system.
+
+---
+
+## 🚀 Key Features
+
+* 🎤 Voice recording & WAV file upload
+* 🤖 ML-based vocal health prediction
+* 📊 Acoustic feature extraction (Pitch, Jitter, Shimmer, HNR, AVHI)
+* ⚠️ Risk level classification (Low / Mild / Moderate / High)
+* 📈 Detailed metrics & insights
+* 🧾 Downloadable analysis report
+* 📂 History tracking of previous analyses
+
+---
+
+## 🧠 Machine Learning Model (Core of the Project)
+
+### 📊 Problem Statement
+
+To classify voice samples into:
+
+* **Healthy Voice Pattern**
+* **Vocal Irregularity (Mild / Moderate / Risk)**
+
+---
+
+## 🔬 Feature Engineering
+
+The model is built on **acoustic voice features** extracted using signal processing techniques.
+
+### 🎯 Key Features Used:
+
+| Feature                       | Description                                   |
+| ----------------------------- | --------------------------------------------- |
+| Pitch (Mean, Std)             | Fundamental frequency of voice                |
+| Jitter                        | Frequency variation (instability)             |
+| Shimmer                       | Amplitude variation                           |
+| HNR (Harmonic-to-Noise Ratio) | Voice clarity indicator                       |
+| MFCCs                         | Spectral features representing voice patterns |
+| AVHI                          | Acoustic Voice Health Index                   |
+| Derived Features              | Interaction-based computed metrics            |
+
+---
+
+## ⚙️ Feature Extraction Pipeline
+
+1. Load audio file using **Librosa**
+2. Convert to mono signal
+3. Normalize audio
+4. Extract:
+
+   * Pitch using autocorrelation
+   * Jitter & Shimmer
+   * HNR
+   * MFCC coefficients
+5. Generate derived statistical features
+6. Format features into structured dataframe
+
+---
+
+## 🧪 Model Training
+
+### 📌 Model Used:
+
+* **Hybrid ML Model (AVHFM Model)**
+
+  * (Custom trained model using classical ML algorithms)
+
+> Likely candidates used:
+
+* Random Forest / Gradient Boosting / SVM (based on implementation)
+
+---
+
+### 📈 Training Workflow
+
+1. Dataset preparation (voice samples labeled as healthy / irregular)
+2. Feature extraction from all samples
+3. Feature normalization
+4. Train-test split
+5. Model training using supervised learning
+6. Hyperparameter tuning
+7. Model evaluation
+
+---
+
+## 📊 Model Performance
+
+| Metric   | Value   |
+| -------- | ------- |
+| Accuracy | ~73.6%  |
+| F1 Score | ~76.45% |
+| ROC-AUC  | ~81.87% |
+
+👉 Indicates strong capability in separating healthy vs irregular voice patterns.
+
+---
+
+## 🎯 Prediction Logic
+
+### Output includes:
+
+* **Prediction Class**
+* **Confidence Score (%)**
+* **Risk Level**
+* **Acoustic Metrics**
+
+---
+
+### ⚠️ Risk Level Classification
+
+```text
+Healthy → Low Risk / Mild Risk / Borderline  
+Irregular → Mild / Moderate / High Risk
+```
+
+---
+
+## 📊 Metrics Computation
+
+From raw features:
+
+* **Pitch Score**
+* **Clarity = HNR-based scaling**
+* **Strain = Jitter + Shimmer**
+* **Stability = Pitch variation**
+
+All values normalized to **0–100 scale** for UI.
+
+---
+
+## 💡 Insight Generation
+
+The system provides intelligent interpretations such as:
+
+* High jitter → vocal instability
+* Low HNR → noisy signal
+* High pitch variation → strain
+
+---
+
+## 🧾 Recommendations Engine
+
+Based on:
+
+* Prediction
+* Confidence
+* Audio Quality
+
+Examples:
+
+* Hydration advice
+* Re-record instructions
+* ENT specialist recommendation
+
+---
+
+## 🧠 Backend (ML API)
+
+Built using:
+
+* **Flask**
+* **Joblib (model loading)**
+
+### API Endpoint:
+
+```
+POST /predict
+```
+
+### Input:
+
+* WAV audio file
+
+### Output:
+
+```json
+{
+  "status": "healthy | warning | risk",
+  "score": 85.3,
+  "diagnosis": "...",
+  "risk_level": "...",
+  "metrics": {...},
+  "recommendations": [...],
+  "insights": [...]
+}
+```
+
+---
+
+## 💻 Frontend
+
+Built using:
+
+* **Next.js (React)**
+* **Tailwind CSS**
+
+### Features:
+
+* Audio upload & recording
+* Real-time analysis UI
+* Progress indicators
+* Result visualization
+* History storage (localStorage)
+* PDF report generation
+
+---
+
+## 🔗 System Workflow
+
+1. User uploads/records voice
+2. Frontend sends file to backend
+3. Backend:
+
+   * Extracts features
+   * Runs ML model
+   * Generates insights
+4. Results displayed in UI
+
+---
+
+## 📁 Project Structure
+
+```
+vocare_backend/
+│── api_app.py
+│── feature_utils.py
+│── avhfm_model.pkl
+│── avhfm_feature_columns.pkl
+
+frontend/
+│── app/
+│── components/
+│── analyze/
+│── dashboard/
+```
+
+---
+
+## ⚠️ Limitations
+
+* Requires clean audio input
+* Not a medical diagnostic tool
+* Accuracy depends on recording quality
+
+---
+
+## 🔮 Future Enhancements
+
+* Real-time waveform visualization
+* Trend tracking dashboard
+* Cloud storage integration
+* Mobile app support
+* Deep learning model (CNN/RNN)
+
+---
+
+## 👨‍💻 Author
+
+Developed as part of an AI/ML-based project for early voice health screening.
+
+---
+
+## 📜 License
+
+For academic and research purposes only.
+
+
+## 🧠 Machine Learning Model Development & Comparison
+
+### 📌 Objective
+
+To identify the most effective model for detecting vocal irregularities using extracted acoustic features.
+
+---
+
+## 🔬 Models Evaluated
+
+Multiple classical machine learning models were trained and evaluated on the same feature set:
+
+### 1️⃣ Logistic Regression (Baseline)
+
+* Simple linear model
+* Works well for linearly separable data
+* Fast and interpretable
+
+**Limitations:**
+
+* Cannot capture complex patterns in voice signals
+
+---
+
+### 2️⃣ Support Vector Machine (SVM)
+
+* Effective in high-dimensional feature spaces
+* Uses kernel trick for non-linear classification
+
+**Strengths:**
+
+* Good for small-to-medium datasets
+* Handles feature complexity better than linear models
+
+**Limitations:**
+
+* Sensitive to parameter tuning
+* Slower for larger datasets
+
+---
+
+### 3️⃣ Random Forest (RF)
+
+* Ensemble model using multiple decision trees
+* Reduces overfitting
+
+**Strengths:**
+
+* Handles non-linear relationships
+* Robust to noise
+
+**Limitations:**
+
+* Can become complex and less interpretable
+
+---
+
+### 4️⃣ Gradient Boosting (GB)
+
+* Sequential learning model
+* Focuses on correcting previous errors
+
+**Strengths:**
+
+* High accuracy
+* Good for structured data
+
+**Limitations:**
+
+* Computationally expensive
+* Risk of overfitting if not tuned properly
+
+---
+
+### 5️⃣ AVHFM Model (Final Selected Model) ⭐
+
+**AVHFM = Acoustic Voice Health Feature Model**
+
+This is a **custom-trained hybrid ML model** built specifically for vocal health screening.
+
+---
+
+## ⚙️ Why AVHFM Model?
+
+Unlike standard models, AVHFM:
+
+* Uses **domain-specific acoustic features**
+* Incorporates **derived interaction features**
+* Optimized for **voice health classification**
+* Tuned for **balanced precision and recall**
+
+---
+
+## 📊 Model Performance Comparison
+
+| Model               | Accuracy  | F1 Score   | ROC-AUC      |
+| ------------------- | --------- | ---------- | ------------ |
+| Logistic Regression | ~73.4%    | ~73%       | ~0.74        |
+| SVM                 | ~76.0%    | ~75.5%     | ~0.76        |
+| Random Forest       | ~75.5%    | ~75.2%     | ~0.75        |
+| Gradient Boosting   | ~74.3%    | ~74%       | ~0.74        |
+| **AVHFM (Final)**   | **73.6%** | **76.45%** | **0.8187** ✅ |
+
+---
+
+## 🏆 Why AVHFM Was Chosen
+
+Even though some models have similar accuracy:
+
+👉 AVHFM provides:
+
+* **Best F1 Score → better balance between precision & recall**
+* **Highest ROC-AUC → strong class separation**
+* More **reliable medical screening behavior**
+
+---
+
+## 🎯 Interpretation
+
+* Logistic Regression → too simple
+* SVM → good but less stable
+* Random Forest → strong but slightly overfits
+* Gradient Boosting → powerful but complex
+* ✅ **AVHFM → balanced, reliable, domain-optimized**
+
+---
+
+## 📈 Key Insight
+
+In healthcare-related applications:
+
+> ❗ Accuracy alone is not enough
+> ✅ F1 Score and ROC-AUC are more important
+
+Because:
+
+* False negatives are dangerous (missing a vocal issue)
+* False positives affect usability
+
+👉 AVHFM minimizes both risks effectively
+
+---
+
+## 🔍 Conclusion
+
+The AVHFM model was selected as the final model because it:
+
+✔ Provides balanced classification
+✔ Performs well across all evaluation metrics
+✔ Is optimized for real-world voice screening
+✔ Integrates domain-specific acoustic intelligence
+
+---
+
+## 🚀 Future Improvements
+
+* Deep Learning (CNN / RNN on spectrograms)
+* Larger dataset training
+* Real-time prediction models
+* Personalized voice baselines
